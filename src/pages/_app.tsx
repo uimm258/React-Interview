@@ -5,13 +5,14 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import React from 'react';
 import useTheme from '../useTheme';
+import { ProviderComposer, provider } from '../providerComposer';
 
-const cache = createCache( {
-	key    : 'css',
+const cache = createCache({
+	key: 'css',
 	prepend: true
-} );
+});
 
-export default function MyApp( { Component, pageProps }: AppProps ) {
+export default function MyApp({ Component, pageProps }: AppProps) {
 	const theme = useTheme();
 
 	return <>
@@ -24,13 +25,16 @@ export default function MyApp( { Component, pageProps }: AppProps ) {
 					user-scalable=no, viewport-fit=cover'
 			/>
 		</Head>
-		<StyledEngineProvider injectFirst>
-			<CacheProvider value={ cache }>
-				<ThemeProvider theme={ theme }>
-					<CssBaseline />
-					<Component { ...pageProps } />
-				</ThemeProvider>
-			</CacheProvider>
-		</StyledEngineProvider>
-	</>;
+
+		<ProviderComposer
+			providers={[
+				provider(StyledEngineProvider, { injectFirst: true }),
+				provider(CacheProvider, { value: cache }),
+				provider(ThemeProvider, { theme: theme })
+			]}
+		>
+			<CssBaseline />
+			<Component {...pageProps} />
+		</ProviderComposer>
+	</>
 }
