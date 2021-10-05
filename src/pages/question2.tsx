@@ -5,7 +5,7 @@ import Link from 'next/link';
 const Converter = () => {
 	const [id, setId] = React.useState("");
 	const [name, setName] = React.useState("");
-	const [newId, setNewId] = React.useState("");
+	const [newId, setNewId] = React.useState("1");
 	
 	React.useEffect(() => {
 		fetch("http://localhost:3000/api")
